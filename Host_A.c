@@ -7,19 +7,20 @@ static qnode* Q;
 static int seq_num;
 static int serv_seq_num;
 
-static int GenChecksum(struct msg message){
-    int checksum = 0;
-    int msglen = sizeof(message);
-    for(int i = 0; i<msglen; i++){
-        checksum += message.data[i];
-    }
-    return checksum;
+static int make_checksum(struct pkt packet) {
+    int sum = 0;
+    for (int i = 0; packet.payload[i] != '\0'; i++)
+        sum += packet.payload[i];
+    sum += packet.acknum;
+    sum += packet.seqnum;
+    return sum;
 }
 
 static void SendToB(){
     if(!IsEmpty(Q)){
         starttimer(A, 10);
         tolayer3(A, CheckQ(Q));
+        seq_num++;
     }
 }
 
@@ -29,7 +30,7 @@ void A_output( struct msg message) {
     packet.seqnum = seq_num;
     packet.acknum = 0;
     memcpy(packet.payload, message.data, sizeof(message));
-    packet.checksum = GenChecksum(message);
+    packet.checksum = make_checksum(packet);
     enQ(&Q, packet);
     serv_seq_num = CheckQ(Q).seqnum;
     if(serv_seq_num == seq_num){
@@ -45,7 +46,6 @@ void A_input(struct pkt packet) {
     printf("\n\ntest input\n\n");
     if(!IsEmpty(Q)){
         deQ(&Q);
-        serv_seq_num++;
     }
     SendToB();
 }
