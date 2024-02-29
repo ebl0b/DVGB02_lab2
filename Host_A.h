@@ -3,6 +3,7 @@
 
 #define A 0
 #define B 1
+#define TIMEOUT 100
 
 void A_output(struct msg message);
 void A_input(struct pkt packet);
