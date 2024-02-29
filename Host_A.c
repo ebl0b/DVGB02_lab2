@@ -17,7 +17,7 @@ static void SendToB()
 }
 
 /* Called from layer 5, passed the data to be sent to other side */
-void A_output(struct msg message)
+void A_output( struct msg message)
 {
     struct pkt packet;
 
