@@ -38,3 +38,12 @@ struct pkt CheckQ(qnode* Q){
 int IsEmpty(qnode* Q){
 	return Q==NULL ? 1 : 0;
 }
+
+int Qsize(qnode* Q){
+	int i = 0;
+	while(Q!=NULL){
+		i++;
+		Q = Q->nx_pkt;
+	}
+	return i;
+}

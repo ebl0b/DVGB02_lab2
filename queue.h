@@ -13,5 +13,6 @@ void 		enQ		(qnode** Q, struct pkt packet);
 void		deQ		(qnode** Q);
 struct pkt	CheckQ	(qnode* Q);
 int			IsEmpty	(qnode* Q);
+int 		Qsize	(qnode* Q);
 
 #endif

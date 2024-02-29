@@ -18,7 +18,7 @@ static int GenChecksum(struct msg message){
 
 static void SendToB(){
     if(!IsEmpty(Q)){
-        //starttimer(A, 10);
+        starttimer(A, 10);
         tolayer3(A, CheckQ(Q));
     }
 }
@@ -32,16 +32,21 @@ void A_output( struct msg message) {
     packet.checksum = GenChecksum(message);
     enQ(&Q, packet);
     serv_seq_num = CheckQ(Q).seqnum;
-    if(serv_seq_num == seq_num)
+    if(serv_seq_num == seq_num){
+        printf("\n\ntest: %d\n\n", Qsize(Q));
         SendToB();
-    seq_num = seq_num++;
+    }
+    seq_num++;
 }
 
 /* Called from layer 3, when a packet arrives for layer 4 */
 void A_input(struct pkt packet) {
-    //stoptimer(A);
-    if(!IsEmpty(Q))
+    stoptimer(A);
+    printf("\n\ntest input\n\n");
+    if(!IsEmpty(Q)){
         deQ(&Q);
+        serv_seq_num++;
+    }
     SendToB();
 }
 
